@@ -1,4 +1,3 @@
-
 IFRAME_URL = "http://localhost:5000/login-v2"
 
 CSS_STR = """
@@ -20,11 +19,12 @@ CSS_STR = """
   opacity: 1;
 }
 """
+
 tagDefaults = 
   name : "button"
   innerHtml : "Authenticate with Tok3n"
-  className : "tok3n-authenticate-button"
-  id : "tok3n-authenticate-button"
+  className : "tok3n-authenticate"
+  id : "tok3n-authenticate"
 
 head = document.head or document.getElementsByTagName( "head" )[0]
 stylesheet = document.createElement( "style" )
@@ -40,6 +40,8 @@ document.body.appendChild iframe
 
 getOrigin = ( iframe ) ->
   return ( new URL iframe.src ).origin
+
+tok3nElement = undefined
 
 @Tok3n = Tok3n = do ( iframe = iframe ) ->
 
@@ -66,12 +68,15 @@ getOrigin = ( iframe ) ->
 
     hideIFrame : ->
       postMessage cmd: "hide"
+
+    tok3nElement : ->
+      tok3nElement
   
   return pub
 
 # locate this script, if we need to append a button or something where it appears
 script = document.querySelector "script[data-tok3n-integration]"
-if script.hasAttribute( "data-render-tag" )
+if script
   el = document.createElement( script.dataset.tagName or tagDefaults.name )
   el.innerHTML = script.dataset.tagInnerHtml or tagDefaults.innerHtml
   el.id = script.dataset.tagId or tagDefaults.id
@@ -80,3 +85,4 @@ if script.hasAttribute( "data-render-tag" )
     el.href = "javascript:void(0)"
   el.addEventListener "click", Tok3n.showIFrame
   script.parentElement.insertBefore( el, script )
+  tok3nElement = el
