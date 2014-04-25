@@ -35,4 +35,4 @@ Usage would look something like:
 
 ## Using the snippet
 
-First, get the js-ui branch of the (validation page)[https://github.com/Tok3n/validation-page/tree/js-ui] repo. Run that project with `foreman start`. Then run this, nothing fancy, just python -m SimpleHTTPServer 8000. Open up localhost:8000/example/index.html and you should see the example page, with a button rendered by the script that will reveal the iframe. Enjoy!
+First, get the js-ui branch of the [validation page](https://github.com/Tok3n/validation-page/tree/js-ui) repo. Run that project with `foreman start`. Then run this, nothing fancy, just python -m SimpleHTTPServer 8000. Open up localhost:8000/example/index.html and you should see the example page, with a button rendered by the script that will reveal the iframe. Enjoy!
