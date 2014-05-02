@@ -27,7 +27,7 @@ tagDefaults =
   id : "tok3n-authenticate"
 
 head = document.head or document.getElementsByTagName( "head" )[0]
-stylesheet = document.createElement( "style" )
+stylesheet = document.createElement "style"
 stylesheet.type = "text/css"
 stylesheet.appendChild document.createTextNode CSS_STR
 head.appendChild stylesheet
@@ -37,42 +37,36 @@ iframe.src = IFRAME_URL
 iframe.id = "tok3n-iframe"
 iframe.setAttribute "allowtransparency", true
 document.body.appendChild iframe
+iframeOrigin = ( new URL iframe.src ).origin
 
-getOrigin = ( iframe ) ->
-  return ( new URL iframe.src ).origin
+@Tok3n = Tok3n = do ->
 
-tok3nElement = undefined
-
-@Tok3n = Tok3n = do ( iframe = iframe ) ->
-
-  origin = getOrigin( iframe )
-
+  # ... this should probably be simpler. 
   postMessage = ( msg ) ->
     msg.parentOrigin = window.location.origin
-    iframe.contentWindow.postMessage msg, origin
+    iframe.contentWindow.postMessage msg, iframeOrigin
 
   messageHandler = ( message ) ->
     switch message.type
       when "hideComplete"
         iframe.classList.remove "visible"
+      when "showComplete"
+        iframe.classList.add "visibile"
 
+  # check that message origin is the iframe before handling message
   window.addEventListener "message", ( event ) ->
-    if event.origin is origin
+    if event.origin is iframeOrigin
      messageHandler( event.data )
 
   # public methods available under global Tok3n namespace go here.
-  pub =
-    showIFrame : ->
-      postMessage cmd: "show"
-      iframe.classList.add "visible"
+  showIFrame : ->
+    postMessage cmd: "show"
+    iframe.classList.add "visible"
 
-    hideIFrame : ->
-      postMessage cmd: "hide"
+  hideIFrame : ->
+    postMessage cmd: "hide"
+    iframe.classList.remove "visible"
 
-    tok3nElement : ->
-      tok3nElement
-  
-  return pub
 
 # locate this script, if we need to append a button or something where it appears
 script = document.querySelector "script[data-tok3n-integration]"
