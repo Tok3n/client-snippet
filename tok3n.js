@@ -2,7 +2,7 @@
 (function() {
   var CSS_STR, IFRAME_URL, Tok3n, el, head, iframe, iframeOrigin, script, stylesheet, tagDefaults, tok3nElement;
 
-  IFRAME_URL = "http://localhost:5000/login-v2";
+  IFRAME_URL = "http://localhost:5000/iframe";
 
   CSS_STR = "#tok3n-iframe {\n  overflow: hidden;\n  opacity: 0;\n  position: fixed;\n  top: 0;\n  left: 0;\n  height: 0;\n  width: " + document.documentElement.clientWidth + "px;\n  width: 100vw;\n  border: none;\n  z-index: 9999;\n} \n#tok3n-iframe.visible {\n  height: " + document.documentElement.clientHeight + "px;\n  height: 100vh;\n  opacity: 1;\n}";
 
@@ -46,26 +46,29 @@
         case "hideComplete":
           return iframe.classList.remove("visible");
         case "showComplete":
-          return iframe.classList.add("visibile");
+          return iframe.classList.add("visible");
       }
     };
-    window.addEventListener("message", function(event) {
-      if (event.origin === iframeOrigin) {
-        return messageHandler(event.data);
-      }
-    });
+    iframe.addEventListener("load", function(event) {
+      return window.addEventListener("message", function(event) {
+        if (event.origin === iframeOrigin) {
+          return messageHandler(event.data);
+        }
+      }, false);
+    }, false);
     return {
-      showIFrame: function() {
+      showIFrame: function(trgt) {
         postMessage({
-          cmd: "show"
+          cmd: "show",
+          target: trgt
         });
-        return iframe.classList.add("visible");
+        iframe.classList.add("visible");
+        return iframe.focus();
       },
       hideIFrame: function() {
-        postMessage({
+        return postMessage({
           cmd: "hide"
         });
-        return iframe.classList.remove("visible");
       }
     };
   })();
@@ -80,7 +83,9 @@
     if (el.tagName.toLowerCase() === "a") {
       el.href = "javascript:void(0)";
     }
-    el.addEventListener("click", Tok3n.showIFrame);
+    el.addEventListener("click", function() {
+      return Tok3n.showIFrame("authorize");
+    });
     script.parentElement.insertBefore(el, script);
     tok3nElement = el;
   }

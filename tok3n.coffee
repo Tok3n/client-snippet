@@ -1,4 +1,4 @@
-IFRAME_URL = "http://localhost:5000/login-v2"
+IFRAME_URL = "http://localhost:5000/iframe"
 
 CSS_STR = """
 #tok3n-iframe {
@@ -19,6 +19,16 @@ CSS_STR = """
   opacity: 1;
 }
 """
+
+# extend = (out) ->
+#   out = out or {}
+#   i = 1
+#   while i < arguments_.length
+#     continue  unless arguments_[i]
+#     for key of arguments_[i]
+#       out[key] = arguments_[i][key]  if arguments_[i].hasOwnProperty(key)
+#     i++
+#   out
 
 tagDefaults = 
   name : "button"
@@ -51,21 +61,26 @@ iframeOrigin = ( new URL iframe.src ).origin
       when "hideComplete"
         iframe.classList.remove "visible"
       when "showComplete"
-        iframe.classList.add "visibile"
+        iframe.classList.add "visible"
 
   # check that message origin is the iframe before handling message
-  window.addEventListener "message", ( event ) ->
-    if event.origin is iframeOrigin
-     messageHandler( event.data )
+  iframe.addEventListener "load", ( event ) ->
+    window.addEventListener "message", ( event ) ->
+      if event.origin is iframeOrigin
+        messageHandler( event.data )
+    , false
+  , false
 
   # public methods available under global Tok3n namespace go here.
-  showIFrame : ->
-    postMessage cmd: "show"
+  showIFrame : (trgt) ->
+    postMessage
+      cmd: "show"
+      target: trgt
     iframe.classList.add "visible"
+    iframe.focus()
 
   hideIFrame : ->
     postMessage cmd: "hide"
-    iframe.classList.remove "visible"
 
 
 # locate this script, if we need to append a button or something where it appears
@@ -77,6 +92,7 @@ if script
   el.className = script.dataset.tagClassName or tagDefaults.className
   if el.tagName.toLowerCase() is "a"
     el.href = "javascript:void(0)"
-  el.addEventListener "click", Tok3n.showIFrame
+  # Please note the target of the iframe is hardcoded
+  el.addEventListener "click", -> Tok3n.showIFrame("authorize")
   script.parentElement.insertBefore( el, script )
   tok3nElement = el
