@@ -13,9 +13,21 @@
     .text-center {
       text-align: center;
     }
-  </style>
+  </style>n
+  
 </head>
 <body>
+  
+  <script language="javascript">
+    function authResponse(response){
+      console.log(response);
+    }
+    function cargado(){
+      var ele = document.getElementById("tok3nId");
+      ele.addEventListener("response",authResponse);
+    }
+    
+  </script>
 
   <div class="wrapper">
     <div class="container-fluid text-center">
@@ -26,11 +38,27 @@
         <div class="col-md-6 col-md-offset-3">
           <h2>Authenticate</h2>
           <p>This button was generated dynamically according to data attributes set on the script tag</p>
+          <!--<script src="../tok3n.js" 
+            data-tok3n-integration
+            data-render-tag
+            data-tag-class-name="btn btn-success btn-lrg btn-block"
+            action="authorize"
+            id="tok3nId"
+            public-key="9765601a-433b-5e1b-7a65-c07c555afe9d"
+            onload="cargado()">
+          </script>
+          -->
           <script src="../tok3n.js" 
             data-tok3n-integration
             data-render-tag
-            data-tag-class-name="btn btn-success btn-lrg btn-block">
+            data-tag-class-name="btn btn-success btn-lrg btn-block"
+            action="authenticate"
+            id="tok3nId"
+            public-key="9765601a-433b-5e1b-7a65-c07c555afe9d"
+            user-key="f76e644f-31cd-59c9-720b-c653e95d8961"
+            onload="cargado()">
           </script>
+          
         </div>
       </div>
     </div>
