@@ -4,8 +4,8 @@
   var response;
 
   //IFRAME_URL = "http://localhost:5000/iframe";
-  //IFRAME_URL = "http://localhost:8080/api_v2_iframe/iframe-template.html";
-  IFRAME_URL = "http://secure.tok3n.com/api_v2_iframe/iframe-template.html";
+  IFRAME_URL = "http://localhost:8080/api_v2_iframe/iframe-template.html";
+  //IFRAME_URL = "http://secure.tok3n.com/api_v2_iframe/iframe-template.html";
 
   CSS_STR = "#tok3n-iframe {\n  overflow: hidden;\n  opacity: 0;\n  position: fixed;\n  top: 0;\n  left: 0;\n  height: 0;\n  width: " + document.documentElement.clientWidth + "px;\n  width: 100vw;\n  border: none;\n  z-index: 9999;\n} \n#tok3n-iframe.visible {\n  height: " + document.documentElement.clientHeight + "px;\n  height: 100vh;\n  opacity: 1;\n}";
 
